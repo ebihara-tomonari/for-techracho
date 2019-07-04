@@ -1,0 +1,15 @@
+version: '3'
+services:
+  web:
+    build: .
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "3080:80"
+
+  mail:
+    # 任意のメールサーバ向け Docker イメージを指定する
+    image: djfarrelly/maildev
+    # image: yaasita/docker_blackhole_mail_server
+    ports:
+      - "1080:80"
