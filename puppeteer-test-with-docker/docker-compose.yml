@@ -1,0 +1,23 @@
+version: '3'
+services:
+  web:
+    build: .
+    volumes:
+      - ./web_root:/var/www/html
+    ports:
+      - "3080:80"
+
+  mail:
+    image: djfarrelly/maildev
+    ports:
+      - "1080:80"
+
+  puppeteer:
+    build: ./puppeteer
+    tty: true
+    stdin_open: true
+    cap_add:
+      - SYS_ADMIN
+    volumes:
+      - ./puppeteer:/home/pptruser/work
+    command: /bin/bash -c "cd /home/pptruser/work && node capture.js"
