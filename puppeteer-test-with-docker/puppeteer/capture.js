@@ -21,7 +21,7 @@ const puppeteer = require('puppeteer');
   await page.goto(mailUrl);
   await page.click('a.email-item:first-of-type');
   await page.screenshot({path: 'logs/capture_mail_' + dateToFormat(now) + '.png'});
-  console.log("save screenshot mailhog");
+  console.log("save screenshot maildev");
 
   const iPhone = puppeteer.devices['iPhone 6'];
   const techrachoUrl = 'https://techracho.bpsinc.jp/';
