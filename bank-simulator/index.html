@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>bank simulator</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script type="text/javascript">
+      function draw() {
+        const W = 244;
+        const L = 500;
+        const app = new Vue({
+          el: '#app',
+          data: {
+            bankTimes: 1,
+            mouse: {
+              x: 0,
+              y: 0
+            },
+            ball: {
+              x: null,
+              y: null
+            },
+            p0: {
+              x: null,
+              y: null
+            }
+          },
+          methods: {
+            // Canvas 上のマウス位置データを更新する
+            updateMousePosition: function(e) {
+              this.mouse.x = e.offsetX;
+              this.mouse.y = e.offsetY;
+            },
+            // Canvas に描写する
+            updateCanvas() {
+              if(this.ball.x === null) {
+                this.setPosition(this.ball);
+                this.drawBall(this.ball);
+              } else if(this.p0.x === null) {
+                const theta = this.calcTheta(this.ball, this.mouse);
+                const p0 = this.calcBankPosition(this.ball, theta);
+                this.p0 = p0;
+                this.drawBall(p0);
+                this.drawLine(this.ball, p0);
+
+                let p_n = p0;
+                for (let step = 0; step < this.bankTimes; step++) {
+                  const p_n1 = this.calcBankPosition(p_n, p_n.theta);
+                  this.drawBall(p_n1);
+                  this.drawLine(p_n, p_n1);
+                  p_n = p_n1;
+                }
+              }
+            },
+            // データを初期化する
+            clearCanvasAndData() {
+              this.ball.x = null;
+              this.ball.y = null;
+              this.p0.x = null;
+              this.p0.y = null;
+              this.ctx.clearRect(0, 0, L, W);
+            },
+            setPosition(position) {
+              position.x = this.mouse.x;
+              position.y = this.mouse.y;
+            },
+            // 位置座標の表示用メソッド
+            displayPosition(position) {
+              if (position.x === null) {
+                return "未定義";
+              } else {
+                return `(${position.x.toFixed(2)},${position.y.toFixed(2)})`;
+              }
+            },
+            // ボールを描写する
+            drawBall(position) {
+              this.ctx.beginPath();
+              const radius = 5.74;
+              const startAngle = 0;
+              const endAngle = 2 * Math.PI;
+              this.ctx.arc(position.x, position.y, radius, startAngle, endAngle);
+              this.ctx.stroke();
+            },
+            // 線を描写する
+            drawLine(position0, position1) {
+              this.ctx.beginPath();
+              this.ctx.moveTo(position0.x, position0.y);
+              this.ctx.lineTo(position1.x, position1.y);
+              this.ctx.stroke();
+            },
+            // 初期位置と tanθ の値からクッション位置を計算する
+            calcBankPosition(p0, theta) {
+              // θ が正の値の時。奥の長クッション側に向かう軌道になる
+              if(theta > 0) {
+                // θ が π/2 未満なら奥の短クッション側に向かう軌道
+                if( theta < Math.PI / 2 ) {
+                  if( this.calcX1(p0, theta) === null) {
+                    return { x: L, y: this.calcY1(p0, theta), theta: Math.PI - theta }
+                  }
+                } else {
+                  if( this.calcX1(p0, theta) === null) {
+                    return { x: 0, y: this.calcY1(p0, theta), theta: Math.PI - theta }
+                  }
+                }
+                return { x: this.calcX1(p0, theta), y: W, theta: -theta }
+              } else {
+                // θ が - π/2 以上なら奥の短クッション側に向かう軌道
+                if( theta > - Math.PI / 2 ) {
+                  if( this.calcX1(p0, theta) === null) {
+                    return { x: L, y: this.calcY1(p0, theta), theta: - Math.PI - theta }
+                  }
+                } else {
+                  if( this.calcX1(p0, theta) === null) {
+                    return { x: 0, y: this.calcY1(p0, theta), theta: - Math.PI - theta }
+                  }
+                }
+                return { x: this.calcX1(p0, theta), y: 0, theta: -theta }
+              }
+            },
+            // ある位置とある位置を繋ぐ軌道の角度 θ の算出。返り値が -π < θ < π なので注意。
+            calcTheta(p0, p1) {
+              return Math.atan2( p1.y - p0.y , p1.x - p0.x );
+            },
+            // ある位置(x0, y0)からある角度で動くときの x1 の算出。定義域に沿わない結果は null とする。
+            calcX1(p0, theta) {
+              const x1_1 = p0.x + (W - p0.y) / Math.tan(theta);
+              const x1_2 = p0.x - p0.y / Math.tan(theta);
+
+              // 0 < θ < π は奥の長クッションに入る
+              if (0 < theta && theta < Math.PI) {
+                if (this.isValidDomainX(x1_1)) {
+                  return x1_1;
+                }
+              } else if (this.isValidDomainX(x1_2)) {
+                return x1_2;
+              }
+              return null
+            },
+            calcY1(p0, theta) {
+              const y1_1 = p0.y + (L - p0.x) * Math.tan(theta);
+              const y1_2 = p0.y - p0.x * Math.tan(theta);
+
+              // -π/2 < θ < π/2 は奥の短クッションに入る
+              if (- Math.PI / 2 < theta && theta < Math.PI / 2) {
+                if (this.isValidDomainY(y1_1)) {
+                  return y1_1;
+                }
+              } else if (this.isValidDomainY(y1_2)) {
+                return y1_2
+              }
+              return null;
+            },
+            isValidDomainX(x) {
+              return (0 < x && x < L)
+            },
+            isValidDomainY(y) {
+              return (0 < y && y < W)
+            }
+          },
+          mounted() {
+            this.ctx = this.$refs.pool.getContext('2d');
+          }
+        })
+      }
+    </script>
+    <style type="text/css">
+      .pool-table-outside { position: relative; padding: 30px; width: 524px; height: 268px; background: brown; }
+      .corner-pocket, .side-pocket { position: absolute; width: 26px; height: 26px; border-radius: 13px; background: black; }
+      .corner-1 { top: 15px; left: 15px; }
+      .corner-2 { top: 15px; right: 15px; }
+      .corner-3 { bottom: 15px; left: 15px; }
+      .corner-4 { bottom: 15px; right: 15px; }
+      .side-1 { top: 15px; left: 278px; }
+      .side-2 { bottom: 15px; left: 278px; }
+      .point { position: absolute; width: 4px; height:4px; border-radius: 2px; background: white; }
+      .point-1 { top: 13px; left: 93.5px; } /* 1/8 = 65.5px */
+      .point-2 { top: 13px; left: 159px; }
+      .point-3 { top: 13px; left: 224.5px; }
+      .point-4 { top: 13px; left: 355.5px; }
+      .point-5 { top: 13px; left: 421px; }
+      .point-6 { top: 13px; left: 486.5px; }
+      .point-7 { top: 95px; left: 13px; } /* 1/4 = 67px */
+      .point-8 { top: 162px; left: 13px; }
+      .point-9 { top: 229px; left: 13px; }
+      .point-10 { bottom: 13px; left: 93.5px; }
+      .point-11 { bottom: 13px; left: 159px; }
+      .point-12 { bottom: 13px; left: 224.5px; }
+      .point-13 { bottom: 13px; left: 355.5px; }
+      .point-14 { bottom: 13px; left: 421px; }
+      .point-15 { bottom: 13px; left: 486.5px; }
+      .point-16 { top: 95px; right: 13px; }
+      .point-17 { top: 162px; right: 13px; }
+      .point-18{ top: 229px; right: 13px; }
+      .pool-table-inside { width: 524px; height: 268px; background: lime; }
+      canvas { margin: 12px; background: green; cursor: crosshair; transform: rotateX(180deg); }
+    </style>
+  </head>
+  <body onload="draw();">
+    <div id="app">
+      <p>クッションさせる回数 : <input type="number" min="1" max="5" v-model.number="bankTimes"></p>
+      <p>今のマウスの位置 : {{ displayPosition(mouse) }}</p>
+      <p>手玉の位置 : {{ displayPosition(ball) }}</p>
+      <p>クッションの位置 : {{ displayPosition(p0) }}</p>
+      <p><button v-on:click="clearCanvasAndData">初期化する</button></p>
+
+      <div class="pool-table-outside">
+        <div class="corner-pocket corner-1"></div>
+        <div class="corner-pocket corner-2"></div>
+        <div class="corner-pocket corner-3"></div>
+        <div class="corner-pocket corner-4"></div>
+        <div class="side-pocket side-1"></div>
+        <div class="side-pocket side-2"></div>
+        <div class="point point-1"></div>
+        <div class="point point-2"></div>
+        <div class="point point-3"></div>
+        <div class="point point-4"></div>
+        <div class="point point-5"></div>
+        <div class="point point-6"></div>
+        <div class="point point-7"></div>
+        <div class="point point-8"></div>
+        <div class="point point-9"></div>
+        <div class="point point-10"></div>
+        <div class="point point-11"></div>
+        <div class="point point-12"></div>
+        <div class="point point-13"></div>
+        <div class="point point-14"></div>
+        <div class="point point-15"></div>
+        <div class="point point-16"></div>
+        <div class="point point-17"></div>
+        <div class="point point-18"></div>
+
+        <div class="pool-table-inside">
+          <canvas ref="pool" width="500" height="244" v-on:mousemove="updateMousePosition" v-on:click="updateCanvas"></canvas>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
