@@ -1,0 +1,34 @@
+version: '3.1'
+
+services:
+  wordpress:
+    build: .
+    ports:
+      - 80:80
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: username
+      WORDPRESS_DB_PASSWORD: password
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - wordpress:/var/www/html
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: username
+      MYSQL_PASSWORD: password
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+    volumes:
+      - db:/var/lib/mysql
+  nuxtjs:
+    build: ./frontend
+    tty: true
+    ports:
+      - 3333:3000
+    volumes:
+      - ./frontend/for-wp-rest-api:/app/for-wp-rest-api
+
+volumes:
+  wordpress:
+  db:
