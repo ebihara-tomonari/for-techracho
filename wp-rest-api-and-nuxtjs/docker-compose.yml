@@ -22,12 +22,14 @@ services:
     volumes:
       - db:/var/lib/mysql
   nuxtjs:
-    build: ./frontend
+    image: node:14
+    user: node
+    working_dir: /home/node
     tty: true
     ports:
       - 3333:3000
     volumes:
-      - ./frontend/for-wp-rest-api:/app/for-wp-rest-api
+      - ./frontend/for-wp-rest-api:/home/node/for-wp-rest-api
 
 volumes:
   wordpress:
