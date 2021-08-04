@@ -71,5 +71,22 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+  },
+
+  router: {
+    base: '/for-techracho/wp-rest-api-and-nuxtjs/frontend/for-wp-rest-api/dist/'
+  },
+
+  hooks: {
+    'generate:done': async generator => {
+      const replace = require('replace-in-file')
+      const options = {
+        files: 'dist/**/*.html',
+        from: 'src="http://localhost/wp-content/uploads',
+        to: 'src="/for-techracho/wp-rest-api-and-nuxtjs/frontend/for-wp-rest-api/dist/uploads',
+      }
+      const results = replace.sync(options);
+      console.log('Replacement results:', results);
+    }
   }
 }
