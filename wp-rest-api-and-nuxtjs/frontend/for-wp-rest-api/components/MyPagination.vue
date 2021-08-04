@@ -25,6 +25,7 @@
         <v-btn v-else class="v-pagination__navigation" disabled><v-icon>mdi-chevron-double-right</v-icon></v-btn>
       </li>
     </ul>
+    <v-pagination style="display: none;"></v-pagination>
   </nav>
 </template>
 
