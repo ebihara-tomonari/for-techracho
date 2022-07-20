@@ -75,7 +75,7 @@ export default {
   },
 
   router: {
-    base: '/for-techracho/wp-rest-api-and-nuxtjs/frontend/for-wp-rest-api/dist/'
+    base: process.env.NODE_ENV == 'production' ? '/for-techracho/wp-rest-api-and-nuxtjs/frontend/for-wp-rest-api/dist/' : '/'
   },
 
   hooks: {
