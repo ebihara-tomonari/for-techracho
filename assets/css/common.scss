@@ -1,0 +1,58 @@
+@font-face {
+  font-family: 'Noto Sans JP';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('~assets/fonts/NotoSansJP-Regular.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Noto Sans JP';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('~assets/fonts/NotoSansJP-Bold.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Exo';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('~assets/fonts/Exo-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Exo';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('~assets/fonts/Exo-Bold.ttf') format('truetype');
+}
+
+* {
+  font-family: 'Noto Sans JP';
+}
+
+.play-btn {
+  display: block;
+  width: 230px;
+  height: 60px;
+  background-color: $main-color;
+  color: black;
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 60px;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  text-align: center;
+  &:hover {
+    opacity: 0.9;
+  }
+  &--sm {
+    width: 164px;
+    height: 45px;
+    font-size: 15px;
+    line-height: 45px;
+  }
+}
