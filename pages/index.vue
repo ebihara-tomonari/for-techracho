@@ -1,5 +1,11 @@
 <template>
-  <Tutorial />
+  <div>
+    <TopMainVisual />
+    <TopStorySection />
+    <CommonCtaArea />
+    <TopTrailerSection />
+    <CommonCtaArea />
+  </div>
 </template>
 
 <script>
