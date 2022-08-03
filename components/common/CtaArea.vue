@@ -3,7 +3,7 @@
     <video class="cta-area__video" playsinline muted autoplay loop src="~assets/bg_movie.mp4"></video>
     <div class="cta-area__content">
       <p class="cta-area__text">ARE YOU READE TO FIGHT?</p>
-      <a class="play-btn" href="#">PLAY NOW</a>
+      <CommonPlayBtn />
     </div>
   </div>
 </template>

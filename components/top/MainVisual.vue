@@ -5,7 +5,7 @@
       <p class="main-visual__genre">VR GAME</p>
       <h1 class="main-visual__title">Planet<br/>Hunters</h1>
       <p class="main-visual__theme">惑星を奪還せよ</p>
-      <a href="#" class="play-btn">PLAY NOW</a>
+      <CommonPlayBtn />
     </div>
     <div class="news-box__container">
       <TopNewsBox />

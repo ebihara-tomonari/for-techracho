@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="overflow: hidden">
     <SiteHeader />
     <Nuxt />
     <SiteFooter />

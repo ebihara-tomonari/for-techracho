@@ -9,13 +9,13 @@
 
 <style lang="scss" scoped>
 .news-box {
-  color: #00fff5;
+  color: $main-color;
   height: 31px;
   width: 360px;
   padding: 0 1em;
   overflow: hidden;
   background-color: black;
-  border: 1px solid #00fff5;
+  border: 1px solid $main-color;
   font-size: 14px;
   font-family: Exo;
   font-weight: bold;

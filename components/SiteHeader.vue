@@ -4,7 +4,7 @@
     <div class="header__links">
       <a href="#story" class="header__link-text">STORY</a>
       <a href="#trailer" class="header__link-text">TRAILER</a>
-      <a href="#" class="play-btn play-btn--sm">PLAY NOW</a>
+      <CommonPlayBtn size="small" />
     </div>
   </header>
 </template>
