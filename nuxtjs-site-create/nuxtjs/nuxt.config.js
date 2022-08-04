@@ -54,4 +54,8 @@ export default {
   build: {
     publicPath: '/nuxtjs/'
   },
+
+  router: {
+    base: process.env.NODE_ENV == 'production' ? '/for-techracho/nuxtjs-site-create/nuxtjs/dist/' : '/'
+  },
 }
