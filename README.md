@@ -7,3 +7,4 @@
 * [lvh.me ドメインを使って、サブドメイン形式の WordPress マルチサイトの Docker 開発環境構築をしよう](https://techracho.bpsinc.jp/ebi/2020_04_23/91311)
 * [ビリヤードを科学する – ファイブ＆ハーフシステムの検証](https://techracho.bpsinc.jp/ebi/2020_09_10/97145)
 * [WP REST API × NuxtJS で SSG するサイト作り](https://techracho.bpsinc.jp/ebi/2021_08_06/110358)
+* [NuxtJS で構築する LP・サイトコーディング開発環境](https://techracho.bpsinc.jp/ebi/2022_08_08/120554)
