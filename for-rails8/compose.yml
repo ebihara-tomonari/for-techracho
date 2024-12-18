@@ -1,0 +1,23 @@
+services:
+  rails:
+    build: .
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/app:cached
+      - bundle:/usr/local/bundle
+      - rails_cache:/app/tmp/cache
+      - node_modules:/app/node_modules
+    command: bundle exec rails server -b 0.0.0.0
+    ports:
+      - '3000:3000'
+
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: postgres
+
+volumes:
+  bundle:
+  node_modules:
+  rails_cache:
